@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="UserMapper">
+
+	<select id="getUserById" parameterType="String" resultType="com.kms.model.User">
+		SELECT userid, password, lastlogin,
+		rank_u, score
+		FROM users WHERE userid = #{userId}	
+	</select>
+		
+	<insert id="addUser" parameterType="com.kms.model.User">
+		INSERT INTO users (userid, password) VALUES (#{userid}, #{password});	
+	</insert>	
+	
+	<select id="showUsers" resultType="com.kms.model.User">
+		select userid, password, lastlogin,
+		rank() over(order by score desc) rank_u, score
+		from users
+	
+	</select>
+	
+
+	<delete id="delUser" parameterType="String">
+		DELETE FROM users WHERE userid = #{userid}	
+	</delete>
+	
+	
+	<update id="modifyUser" parameterType="com.kms.model.User">
+		UPDATE users SET password= #{password} WHERE userid = #{userid}
+	</update>
+	
+	<update id="setLastLogin" parameterType="String">
+		UPDATE users SET lastlogin = NOW() WHERE userid = #{userId}
+	</update>
+	
+	<update id="setScore" parameterType="com.kms.model.User">
+		UPDATE users SET score= #{score} WHERE userid = #{userid}
+	</update>
+	
+	<update id="setRank" parameterType="com.kms.model.User">
+		UPDATE users SET rank_u= #{rank_u} WHERE userid = #{userid}
+	</update>
+</mapper>
